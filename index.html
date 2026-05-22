@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPD · Etiquetas APLi 01280</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── TOKENS ── */
+:root {
+  --bg:#f0f2f5; --surface:#fff; --s2:#f8f9fb; --s3:#f0f4ff;
+  --border:#e2e5ea; --border2:#d0d4db;
+  --navy:#1a2744; --navy2:#243258;
+  --blue:#2563eb; --blue-lt:#eff4ff;
+  --txt:#111827; --txt2:#4b5563; --muted:#9ca3af;
+  --green:#16a34a; --green-bg:#f0fdf4;
+  --red:#dc2626;
+  --r:12px; --r2:8px; --r3:6px;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --sh2:0 8px 40px rgba(0,0,0,.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:'Outfit',sans-serif;font-size:14px;min-height:100vh}
+
+/* ── NAV ── */
+.nav{background:var(--navy);height:54px;padding:0 28px;display:flex;align-items:center;gap:14px;
+     position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-pill{background:rgba(255,255,255,.15);border-radius:6px;padding:4px 10px;
+          font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.85);letter-spacing:.05em}
+.nav-title{font-size:15px;font-weight:600;color:#fff}
+.nav-title span{color:rgba(255,255,255,.4);font-weight:300}
+.nav-sp{flex:1}
+.nav-note{font-size:11px;color:rgba(255,255,255,.45);font-family:'JetBrains Mono',monospace}
+
+/* ── GRID ── */
+.wrap{max-width:1360px;margin:0 auto;padding:24px 20px;
+      display:grid;grid-template-columns:1fr 1fr 390px;gap:18px;align-items:start}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+      box-shadow:var(--sh);overflow:hidden}
+.ch{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;
+    gap:10px;background:var(--s2)}
+.ch-ico{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+        font-size:13px;font-weight:700;flex-shrink:0;background:var(--navy);color:#fff;
+        transition:background .3s}
+.ch-ico.ok{background:var(--green)}
+.ch-title{font-size:13px;font-weight:600;flex:1}
+.ch-tag{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);
+        background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 7px}
+.cb{padding:18px}
+
+/* ── DROPZONE ── */
+.dz{border:2px dashed var(--border2);border-radius:var(--r2);padding:24px 16px;text-align:center;
+    cursor:pointer;transition:all .2s;position:relative;background:var(--s2)}
+.dz:hover,.dz.over{border-color:var(--blue);background:var(--blue-lt)}
+.dz.loaded{border-color:var(--green);background:var(--green-bg);border-style:solid}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2}
+.dz-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;
+         justify-content:center;margin:0 auto 10px;font-size:19px;transition:background .3s}
+.dz-label{font-size:13px;font-weight:600;color:var(--txt);margin-bottom:3px}
+.dz-hint{font-size:11px;color:var(--muted)}
+
+/* ── STATUS ── */
+.st{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:var(--r2);
+    font-size:12px;font-weight:500;margin-top:10px}
+.st.ok{background:var(--green-bg);color:var(--green);border:1px solid #bbf7d0}
+.st.err{background:#fef2f2;color:var(--red);border:1px solid #fecaca}
+.st.info{background:var(--blue-lt);color:var(--blue);border:1px solid #bfdbfe}
+
+/* ── DOCX PREVIEW PANEL ── */
+.prev-panel{margin-top:14px;display:none}
+.prev-panel-label{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;
+                  letter-spacing:.07em;margin-bottom:8px}
+/* The preview box that shows docx content with formatting */
+.docx-box{
+  border:1px solid var(--border2);border-radius:var(--r2);background:#fff;
+  overflow:hidden;max-height:260px;overflow-y:auto;
+  padding:12px 14px;
+}
+/* ── DOCX CONTENT STYLES (applied inside .docx-box and print) ── */
+.docx-content table{border-collapse:collapse;width:100%;margin:4px 0;font-size:11px}
+.docx-content thead tr:first-child td,
+.docx-content thead tr:first-child th,
+.docx-content table tr:first-child td{
+  background:#1a2744!important;color:#fff!important;font-weight:700;
+  padding:5px 8px;border:1px solid #1a2744;font-size:11px
+}
+.docx-content table tr:not(:first-child) td{
+  border:1px solid #d0d4db;padding:4px 8px;vertical-align:top;font-size:10.5px
+}
+.docx-content table tr:nth-child(even):not(:first-child) td{background:#f8f9fb}
+.docx-content p{margin:3px 0;font-size:11px;line-height:1.45}
+.docx-content strong,.docx-content b{font-weight:700}
+.docx-content h1,.docx-content h2,.docx-content h3{
+  font-size:12px;font-weight:700;margin:5px 0 3px;color:var(--navy)}
+.docx-content ul,.docx-content ol{padding-left:18px;margin:4px 0}
+.docx-content li{font-size:11px;margin:2px 0}
+
+/* ── LOGO UPLOAD ── */
+.logo-zone{border:2px dashed var(--border2);border-radius:var(--r2);padding:14px 16px;
+           display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;
+           position:relative;background:var(--s2);margin-bottom:16px}
+.logo-zone:hover{border-color:var(--blue);background:var(--blue-lt)}
+.logo-zone.has-logo{border-color:var(--green);border-style:solid;background:var(--green-bg)}
+.logo-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2}
+.logo-thumb{width:52px;height:52px;border-radius:8px;background:var(--bg);border:1px solid var(--border);
+            display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;font-size:22px}
+.logo-thumb img{width:100%;height:100%;object-fit:contain}
+.logo-text strong{font-size:13px;color:var(--txt);display:block;margin-bottom:2px}
+.logo-text span{font-size:11px;color:var(--muted)}
+.logo-clear{position:absolute;top:8px;right:10px;background:none;border:none;
+            cursor:pointer;font-size:16px;color:var(--muted);z-index:3;line-height:1}
+.logo-clear:hover{color:var(--red)}
+
+/* ── QUAD PICKER ── */
+.qs-title{font-size:11px;font-weight:600;color:var(--txt2);text-transform:uppercase;
+          letter-spacing:.07em;margin:14px 0 8px}
+.qpicker{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.qp{background:var(--s2);border:1.5px solid var(--border);border-radius:var(--r3);
+    padding:10px 4px;font-size:10px;font-family:'JetBrains Mono',monospace;
+    cursor:pointer;text-align:center;transition:all .15s;
+    display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--txt2)}
+.qp .qn{font-size:20px;font-weight:700;color:var(--navy);line-height:1}
+.qp:hover{border-color:var(--blue);background:var(--blue-lt)}
+.qp.act-anv{border-color:#1a2744;background:#e8f0fe;color:#1a2744}
+.qp.act-anv .qn{color:#1a2744}
+.qp.act-rev{border-color:#374151;background:#f1f3f5;color:#374151}
+.qp.act-rev .qn{color:#374151}
+.qp.blocked{opacity:.35;cursor:not-allowed;pointer-events:none}
+
+/* ── A4 MAP ── */
+.a4map{width:100%;aspect-ratio:210/297;background:#fff;border:1.5px solid var(--border2);
+       border-radius:6px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+       overflow:hidden;position:relative;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.mq{border:.75px solid #dde;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:3px;position:relative;transition:background .15s;cursor:default}
+.mq-num{font-size:20px;font-weight:700;color:var(--navy);font-family:'JetBrains Mono',monospace;line-height:1}
+.mq-sub{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:center}
+.mq-badge{position:absolute;top:5px;right:5px;font-size:8px;font-weight:700;
+          padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
+.mq-badge.anv{background:#1a2744;color:#fff}
+.mq-badge.rev{background:#374151;color:#fff}
+.mq.has-anv{background:#e8f0fe}
+.mq.has-rev{background:#f1f3f5}
+.a4-dv{position:absolute;top:0;bottom:0;left:50%;width:1.5px;background:var(--border2);pointer-events:none;z-index:2}
+.a4-dh{position:absolute;left:0;right:0;top:50%;height:1.5px;background:var(--border2);pointer-events:none;z-index:2}
+.legend{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--txt2)}
+.leg-dot{width:10px;height:10px;border-radius:2px}
+.leg-dot.anv{background:#1a2744} .leg-dot.rev{background:#374151}
+
+/* ── CONFLICT ── */
+.conflict{display:none;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--r2);
+          font-size:12px;font-weight:500;margin-top:10px;
+          background:#fff7ed;color:var(--amber);border:1px solid #fed7aa}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;
+     border-radius:var(--r2);font-size:14px;font-weight:600;cursor:pointer;border:none;
+     transition:all .15s;font-family:'Outfit',sans-serif}
+.btn-navy{background:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(26,39,68,.3)}
+.btn-navy:hover{background:var(--navy2);transform:translateY(-1px)}
+.btn-navy:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-outline{background:var(--surface);border:1.5px solid var(--border2);color:var(--txt2)}
+.btn-outline:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
+.btn-outline:disabled{opacity:.4;cursor:not-allowed}
+.btn-full{width:100%}
+.btn-sm{padding:8px 14px;font-size:12px}
+
+/* ── TIP ── */
+.tip{padding:10px 13px;background:var(--blue-lt);border:1px solid #bfdbfe;
+     border-radius:var(--r2);font-size:12px;color:var(--blue);line-height:1.55}
+.tip strong{font-weight:600}
+
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(8,12,24,.72);z-index:500;
+         align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:16px;width:760px;max-width:96vw;
+       max-height:93vh;overflow-y:auto;box-shadow:var(--sh2);border:1px solid var(--border)}
+.mh{padding:18px 22px 14px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between}
+.mh-title{font-size:16px;font-weight:700}
+.mclose{background:var(--s2);border:1px solid var(--border);border-radius:8px;
+        width:30px;height:30px;cursor:pointer;font-size:18px;
+        display:flex;align-items:center;justify-content:center;color:var(--txt2);transition:all .15s}
+.mclose:hover{background:#fef2f2;color:var(--red);border-color:#fecaca}
+.mb{padding:20px 22px}
+.mf{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+
+/* ── A4 FULL PREVIEW (modal) ── */
+.a4-full{
+  width:100%;aspect-ratio:210/297;
+  background:#fff;border:1px solid var(--border2);border-radius:4px;
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.15);position:relative
+}
+.fq{border:.5px solid #dde;overflow:hidden;position:relative}
+
+/* Rotation trick for preview:
+   Each quad is portrait (105w × 148.5h ratio).
+   Label is landscape (148.5 wide × 105 tall).
+   We rotate content 90° CCW inside.
+   After rotation: the content's width (148.5) maps to the quad's height.
+   We scale by (quad_height / 148.5) = 1.0 (since quad_height ≡ 148.5 units).
+   In CSS: use a nested div scaled to fit via transform. */
+.fq-content{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.fq-rotated{
+  /* 
+   Quad aspect: 105 wide × 148.5 tall (portrait).
+   We want to show label landscape 148.5 wide × 105 tall.
+   rotate 90°CW means: x→y, y→-x
+   So set the inner div to width=100% of quad height, height=100% of quad width
+   Then rotate. Use CSS trick: percent widths/heights don't work with transform,
+   so we use a known scale factor.
+  */
+  transform: rotate(90deg);
+  width: 142%; /* quad_h / quad_w * 100 = 148.5/105 * 100 ≈ 141.4% */
+  height: 70.7%; /* quad_w / quad_h * 100 = 105/148.5 * 100 ≈ 70.7% */
+  overflow: hidden;
+}
+.fq-inner{
+  width:100%;height:100%;
+  font-family:Arial,sans-serif;font-size:9px;
+  background:#fff;padding:6px 8px;overflow:hidden;
+}
+/* docx styles inside preview */
+.fq-inner table{border-collapse:collapse;width:100%;margin:2px 0}
+.fq-inner table tr:first-child td{
+  background:#1a2744!important;color:#fff!important;font-weight:700;
+  padding:3px 5px;border:1px solid #1a2744;font-size:8px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact
+}
+.fq-inner table tr:not(:first-child) td{
+  border:1px solid #ccc;padding:2px 5px;font-size:7.5px;vertical-align:top
+}
+.fq-inner table tr:nth-child(even):not(:first-child) td{background:#f8f9fb}
+.fq-inner p{margin:1px 0;font-size:8px;line-height:1.3}
+.fq-inner strong,.fq-inner b{font-weight:700}
+.fq-inner h1,.fq-inner h2,.fq-inner h3{font-size:9px;font-weight:700;margin:2px 0;color:#1a2744}
+.fq-logo{max-height:18px;max-width:60px;object-fit:contain;margin-bottom:3px;display:block}
+
+.fq-empty{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+          color:#ccc;font-size:10px;font-family:'JetBrains Mono',monospace}
+
+
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-pill">APLi 01280</div>
+  <div class="nav-title">SPD <span>/ Impresor de Etiquetas</span></div>
+  <div class="nav-sp"></div>
+  <div class="nav-note">148,5 mm · orientación horizontal</div>
+</nav>
+
+<!-- MAIN -->
+<div class="wrap">
+
+  <!-- ─── COL 1 · ANVERSO ─── -->
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <div class="card">
+      <div class="ch">
+        <div class="ch-ico" id="ico-anv">A</div>
+        <span class="ch-title">Anverso</span>
+        <span class="ch-tag">.docx</span>
+      </div>
+      <div class="cb">
+
+        <!-- LOGO (only on anverso) -->
+        <div class="logo-zone" id="logo-zone">
+          <input type="file" id="logo-input" accept="image/*">
+          <button class="logo-clear" id="logo-clear" style="display:none" onclick="clearLogo(event)">✕</button>
+          <div class="logo-thumb" id="logo-thumb">🏪</div>
+          <div class="logo-text">
+            <strong id="logo-name">Añadir logotipo</strong>
+            <span>PNG · JPG · SVG — aparece en el anverso</span>
+          </div>
+        </div>
+
+        <!-- DOCX DROP -->
+        <div class="dz" id="dz-anv">
+          <input type="file" accept=".docx" id="file-anv">
+          <div class="dz-icon" id="dzico-anv" style="background:#1a2744">📄</div>
+          <div class="dz-label">Word del <strong>anverso</strong></div>
+          <div class="dz-hint">Arrastra o haz clic · .docx</div>
+        </div>
+        <div id="st-anv"></div>
+
+        <!-- DOCX PREVIEW -->
+        <div class="prev-panel" id="pp-anv">
+          <div class="prev-panel-label">Vista previa</div>
+          <div class="docx-box">
+            <div class="docx-content" id="prev-anv"></div>
+          </div>
+        </div>
+
+        <!-- QUAD PICKER -->
+        <div id="qsect-anv" style="display:none">
+          <div class="qs-title">Cuadrante del anverso</div>
+          <div class="qpicker" id="qp-anv">
+            <button class="qp act-anv" data-q="1" onclick="setQuad('anv',1)"><span class="qn">1</span>Sup.Izq.</button>
+            <button class="qp" data-q="2" onclick="setQuad('anv',2)"><span class="qn">2</span>Sup.Der.</button>
+            <button class="qp" data-q="3" onclick="setQuad('anv',3)"><span class="qn">3</span>Inf.Izq.</button>
+            <button class="qp" data-q="4" onclick="setQuad('anv',4)"><span class="qn">4</span>Inf.Der.</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── COL 2 · REVERSO ─── -->
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <div class="card">
+      <div class="ch">
+        <div class="ch-ico" style="background:#374151" id="ico-rev">R</div>
+        <span class="ch-title">Reverso</span>
+        <span class="ch-tag">.docx</span>
+      </div>
+      <div class="cb">
+
+        <div class="dz" id="dz-rev">
+          <input type="file" accept=".docx" id="file-rev">
+          <div class="dz-icon" id="dzico-rev" style="background:#374151">📄</div>
+          <div class="dz-label">Word del <strong>reverso</strong></div>
+          <div class="dz-hint">Arrastra o haz clic · .docx</div>
+        </div>
+        <div id="st-rev"></div>
+
+        <div class="prev-panel" id="pp-rev">
+          <div class="prev-panel-label">Vista previa</div>
+          <div class="docx-box">
+            <div class="docx-content" id="prev-rev"></div>
+          </div>
+        </div>
+
+        <div id="qsect-rev" style="display:none">
+          <div class="qs-title">Cuadrante del reverso</div>
+          <div class="qpicker" id="qp-rev">
+            <button class="qp" data-q="1" onclick="setQuad('rev',1)"><span class="qn">1</span>Sup.Izq.</button>
+            <button class="qp act-rev" data-q="2" onclick="setQuad('rev',2)"><span class="qn">2</span>Sup.Der.</button>
+            <button class="qp" data-q="3" onclick="setQuad('rev',3)"><span class="qn">3</span>Inf.Izq.</button>
+            <button class="qp" data-q="4" onclick="setQuad('rev',4)"><span class="qn">4</span>Inf.Der.</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── COL 3 · RIGHT PANEL ─── -->
+  <div style="display:flex;flex-direction:column;gap:14px">
+
+    <!-- A4 MAP -->
+    <div class="card">
+      <div class="ch">
+        <div class="ch-ico" style="background:var(--blue);font-size:13px">📄</div>
+        <span class="ch-title">Mapa de la hoja A4</span>
+      </div>
+      <div class="cb">
+        <p style="font-size:12px;color:var(--txt2);margin-bottom:12px;line-height:1.5">
+          Cada documento ocupa un cuadrante distinto.
+          El texto se imprimirá en horizontal a lo largo de los <strong>148,5 mm</strong>.
+        </p>
+        <div class="a4map">
+          <div class="mq" id="mq1"><span class="mq-num">1</span><span class="mq-sub">Sup.Izq.</span></div>
+          <div class="mq" id="mq2"><span class="mq-num">2</span><span class="mq-sub">Sup.Der.</span></div>
+          <div class="mq" id="mq3"><span class="mq-num">3</span><span class="mq-sub">Inf.Izq.</span></div>
+          <div class="mq" id="mq4"><span class="mq-num">4</span><span class="mq-sub">Inf.Der.</span></div>
+          <div class="a4-dv"></div><div class="a4-dh"></div>
+        </div>
+        <div class="legend">
+          <div class="leg"><div class="leg-dot anv"></div>Anverso</div>
+          <div class="leg"><div class="leg-dot rev"></div>Reverso</div>
+        </div>
+        <div class="conflict" id="conflict">⚠️ Mismo cuadrante — asigna cuadrantes distintos</div>
+      </div>
+    </div>
+
+    <!-- PRINT CARD -->
+    <div class="card">
+      <div class="ch">
+        <div class="ch-ico" style="background:var(--blue);font-size:13px">🖨️</div>
+        <span class="ch-title">Imprimir</span>
+      </div>
+      <div class="cb" style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn btn-outline btn-full btn-sm" id="prevBtn" onclick="openModal()" disabled>
+          👁 Vista previa A4
+        </button>
+        <button class="btn btn-navy btn-full" id="printBtn" onclick="doPrint()" disabled>
+          🖨️ Imprimir ahora
+        </button>
+        <div class="tip">
+          💡 <strong>Diálogo de impresión:</strong> Márgenes → <em>Ninguno</em> · desactivar encabezados · escala <strong>100%</strong>.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- ── PREVIEW MODAL ── -->
+<div class="overlay" id="prevModal">
+  <div class="modal">
+    <div class="mh">
+      <span class="mh-title">Vista previa · APLi 01280</span>
+      <button class="mclose" onclick="closeModal()">×</button>
+    </div>
+    <div class="mb">
+      <p style="font-size:12px;color:var(--txt2);margin-bottom:14px;line-height:1.5">
+        Contenido girado 90° — el texto corre a lo largo de los <strong>148,5 mm</strong> de cada etiqueta.
+      </p>
+      <div class="a4-full">
+        <div class="fq" id="fq1"><div class="fq-empty">Q1</div></div>
+        <div class="fq" id="fq2"><div class="fq-empty">Q2</div></div>
+        <div class="fq" id="fq3"><div class="fq-empty">Q3</div></div>
+        <div class="fq" id="fq4"><div class="fq-empty">Q4</div></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-outline btn-sm" onclick="closeModal()">Cerrar</button>
+      <button class="btn btn-navy btn-sm" onclick="doPrint()">🖨️ Imprimir</button>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+/* ─────────────── STATE ─────────────── */
+const S = {
+  anv: { html: null, quad: 1 },
+  rev: { html: null, quad: 2 },
+  logo: null  // dataURL
+};
+const QNAMES = {1:'Sup.Izq.',2:'Sup.Der.',3:'Inf.Izq.',4:'Inf.Der.'};
+
+/* ─────────────── LOGO ─────────────── */
+const logoInput = document.getElementById('logo-input');
+logoInput.addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    S.logo = ev.target.result;
+    document.getElementById('logo-thumb').innerHTML = `<img src="${S.logo}" alt="logo">`;
+    document.getElementById('logo-name').textContent = f.name;
+    document.getElementById('logo-zone').classList.add('has-logo');
+    document.getElementById('logo-clear').style.display = '';
+  };
+  r.readAsDataURL(f);
+});
+function clearLogo(e) {
+  e.stopPropagation(); e.preventDefault();
+  S.logo = null;
+  document.getElementById('logo-thumb').innerHTML = '🏪';
+  document.getElementById('logo-name').textContent = 'Añadir logotipo';
+  document.getElementById('logo-zone').classList.remove('has-logo');
+  document.getElementById('logo-clear').style.display = 'none';
+  logoInput.value = '';
+}
+
+/* ─────────────── DOCX LOAD ─────────────── */
+function initDrop(side) {
+  const dz  = document.getElementById('dz-' + side);
+  const inp = document.getElementById('file-' + side);
+  dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('over'); });
+  dz.addEventListener('dragleave', ()  => dz.classList.remove('over'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault(); dz.classList.remove('over');
+    const f = e.dataTransfer.files[0]; if (f) loadDocx(side, f);
+  });
+  inp.addEventListener('change', e => { if (e.target.files[0]) loadDocx(side, e.target.files[0]); });
+}
+initDrop('anv'); initDrop('rev');
+
+function loadDocx(side, file) {
+  const stEl = document.getElementById('st-' + side);
+  stEl.innerHTML = '<div class="st info">⏳ Leyendo documento…</div>';
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    mammoth.convertToHtml(
+      { arrayBuffer: e.target.result },
+      {
+        styleMap: [
+          "b => b", "i => i", "u => u",
+          "strike => s",
+          "p[style-name='heading 1'] => h2:fresh",
+          "p[style-name='heading 2'] => h3:fresh"
+        ]
+      }
+    ).then(result => {
+      S[side].html = result.value;
+
+      // Populate in-card preview
+      document.getElementById('prev-' + side).innerHTML = result.value || '<em style="color:#bbb">Documento sin contenido visible</em>';
+      document.getElementById('pp-' + side).style.display = '';
+
+      // Update dropzone
+      dz(side).classList.add('loaded');
+      document.getElementById('dzico-' + side).textContent = '✓';
+      document.getElementById('ico-' + side).classList.add('ok');
+      document.getElementById('ico-' + side).textContent = '✓';
+
+      // Show quad picker
+      document.getElementById('qsect-' + side).style.display = '';
+
+      stEl.innerHTML = `<div class="st ok">✓ "${file.name}" cargado</div>`;
+      refreshAll();
+    }).catch(err => {
+      stEl.innerHTML = `<div class="st err">✗ Error: ${err.message || err}</div>`;
+    });
+  };
+  reader.readAsArrayBuffer(file);
+}
+const dz = id => document.getElementById('dz-' + id);
+
+/* ─────────────── QUADRANT ─────────────── */
+function setQuad(side, q) {
+  S[side].quad = q;
+  document.querySelectorAll(`#qp-${side} .qp`).forEach(b => {
+    b.className = 'qp';
+    if (+b.dataset.q === q) b.classList.add('act-' + side);
+  });
+  refreshAll();
+}
+
+/* ─────────────── REFRESH ALL ─────────────── */
+function refreshAll() {
+  updateMap();
+  updateButtons();
+}
+
+function updateMap() {
+  for (let q = 1; q <= 4; q++) {
+    const cell = document.getElementById('mq' + q);
+    // clear
+    cell.className = 'mq';
+    cell.querySelectorAll('.mq-badge').forEach(b => b.remove());
+    const hasAnv = S.anv.html && S.anv.quad === q;
+    const hasRev = S.rev.html && S.rev.quad === q;
+    if (hasAnv) {
+      cell.classList.add('has-anv');
+      addBadge(cell, 'ANV', 'anv');
+    }
+    if (hasRev) {
+      cell.classList.add('has-rev');
+      addBadge(cell, 'REV', 'rev');
+    }
+  }
+  // Block opposite quad in each picker
+  ['anv','rev'].forEach(side => {
+    const other = side === 'anv' ? 'rev' : 'anv';
+    document.querySelectorAll(`#qp-${side} .qp`).forEach(b => {
+      const taken = S[other].html && +b.dataset.q === S[other].quad;
+      b.classList.toggle('blocked', taken);
+    });
+  });
+  // Conflict warning
+  const conflict = S.anv.html && S.rev.html && S.anv.quad === S.rev.quad;
+  document.getElementById('conflict').style.display = conflict ? 'flex' : 'none';
+}
+function addBadge(cell, label, cls) {
+  const b = document.createElement('div');
+  b.className = 'mq-badge ' + cls; b.textContent = label;
+  cell.appendChild(b);
+}
+
+function updateButtons() {
+  const hasAny = S.anv.html || S.rev.html;
+  const conflict = S.anv.html && S.rev.html && S.anv.quad === S.rev.quad;
+  document.getElementById('prevBtn').disabled = !hasAny;
+  document.getElementById('printBtn').disabled = !hasAny || conflict;
+}
+
+/* ─────────────── PREVIEW MODAL ─────────────── */
+function openModal() {
+  renderA4Preview();
+  document.getElementById('prevModal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('prevModal').classList.remove('open');
+}
+
+function renderA4Preview() {
+  const logoTag = S.logo
+    ? `<img src="${S.logo}" class="fq-logo" alt="logo">`
+    : '';
+
+  for (let q = 1; q <= 4; q++) {
+    const cell = document.getElementById('fq' + q);
+    const isAnv = S.anv.html && S.anv.quad === q;
+    const isRev = S.rev.html && S.rev.quad === q;
+
+    if (isAnv || isRev) {
+      const html = isAnv ? S.anv.html : S.rev.html;
+      const logo = isAnv ? logoTag : '';
+      cell.innerHTML = `
+        <div class="fq-content">
+          <div class="fq-rotated">
+            <div class="fq-inner">${logo}${html}</div>
+          </div>
+        </div>`;
+    } else {
+      cell.innerHTML = `<div class="fq-empty">Q${q}</div>`;
+    }
+  }
+}
+
+/* ─────────────── PRINT ─────────────── */
+/*
+/*
+ * GEOMETRÍA DE ROTACIÓN (probada y correcta)
+ * ───────────────────────────────────────────
+ * Cuadrante en papel: 397px ancho × 561px alto  (105mm × 148.5mm a 96dpi)
+ * Etiqueta landscape: 561px ancho × 397px alto  (148.5mm × 105mm)
+ *
+ * Queremos que la etiqueta (561×397) encaje exactamente en el cuadrante (397×561).
+ * Técnica: rotar 90°CW usando transform-origin: top left, luego translateX(397px).
+ *
+ *   transform-origin: top left;
+ *   transform: rotate(90deg) translateX(0) → el elemento sale por la derecha del cuadrante
+ *   Necesitamos moverlo hacia abajo en el eje original = translateY en espacio rotado
+ *   pero es más fácil en mm:
+ *
+ *   Fórmula exacta probada en Chrome:
+ *     position: absolute; top: 0; left: 0;
+ *     width: 148.5mm; height: 105mm;
+ *     transform-origin: top left;
+ *     transform: rotate(90deg) translateY(-105mm);
+ *
+ *   Esto coloca el elemento rotado perfectamente dentro del cuadrante:
+ *   - Su borde izquierdo (que ahora apunta hacia arriba) = borde superior del cuadrante ✓
+ *   - Su borde superior (que ahora apunta a la derecha) = borde izquierdo del cuadrante ✓
+ *   - Sus dimensiones post-rotación: 105mm ancho × 148.5mm alto = rellena el cuadrante ✓
+ *
+ * Márgenes de contenido:
+ *   padding: 4mm 5mm  → 5mm en los extremos del eje de 148.5mm, 4mm en el de 105mm
+ */
+function buildPrintHTML() {
+  const QPOS = {
+    1: 'top:0mm;   left:0mm',
+    2: 'top:0mm;   left:105mm',
+    3: 'top:148.5mm; left:0mm',
+    4: 'top:148.5mm; left:105mm'
+  };
+
+  const logoTag = S.logo
+    ? `<img src="${S.logo}" style="max-height:12mm;max-width:45mm;object-fit:contain;display:block;margin-bottom:2mm;" alt="logo">`
+    : '';
+
+  let quadsHTML = '';
+  ['anv', 'rev'].forEach(side => {
+    if (!S[side].html) return;
+    const q    = S[side].quad;
+    const logo = (side === 'anv') ? logoTag : '';
+    quadsHTML += `
+<div style="position:absolute;${QPOS[q]};width:105mm;height:148.5mm;overflow:hidden;background:#fff;">
+  <div style="
+      position:absolute;
+      top:0; left:0;
+      width:148.5mm; height:105mm;
+      transform-origin:top left;
+      transform:rotate(90deg) translateY(-105mm);
+      box-sizing:border-box;
+      padding:4mm 5mm;
+      background:#fff;
+      overflow:hidden;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;">
+    ${logo}${S[side].html}
+  </div>
+</div>`;
+  });
+
+  /* CSS completo para el documento impreso */
+  const css = `
+    @page { size: A4 portrait; margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+    html, body { margin: 0; padding: 0; width: 210mm; height: 297mm; background: #fff; }
+
+    /* ── Tablas ── */
+    table { border-collapse: collapse; width: 100%; margin: 2pt 0; }
+
+    /* Primera fila → cabecera oscura (tal como en el Word del usuario) */
+    table tr:first-child td,
+    table tr:first-child th {
+      background: #1a2744 !important;
+      color: #fff !important;
+      font-weight: 700;
+      font-size: 7pt;
+      padding: 2.5pt 4pt;
+      border: 0.5pt solid #0f1929;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    table tr:not(:first-child) td {
+      border: 0.5pt solid #999;
+      padding: 2pt 4pt;
+      font-size: 7pt;
+      vertical-align: top;
+      color: #111;
+    }
+    table tr:nth-child(even):not(:first-child) td {
+      background: #f4f5f7 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ── Texto ── */
+    p          { margin: 1.5pt 0; font-size: 7.5pt; line-height: 1.3; }
+    strong, b  { font-weight: 700; }
+    em, i      { font-style: italic; }
+    h1, h2, h3 { font-size: 8pt; font-weight: 700; margin: 3pt 0 1.5pt; color: #1a2744; }
+    ul, ol     { padding-left: 12pt; margin: 2pt 0; }
+    li         { font-size: 7pt; margin: 1pt 0; }
+  `;
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>${css}</style>
+</head>
+<body>
+  <div style="position:relative;width:210mm;height:297mm;overflow:hidden;background:#fff;">
+    ${quadsHTML}
+  </div>
+</body>
+</html>`;
+}
+
+/* ── IMPRIMIR ──────────────────────────────────────────────────────────────
+ * Usamos Blob URL: es el único método que funciona de forma fiable cuando
+ * el archivo se abre como file:// en Chrome/Edge (el window.open+document.write
+ * queda en blanco porque Chrome no ejecuta scripts en about:blank desde file://).
+ *
+ * Flujo:
+ *   1. Generamos el HTML completo con buildPrintHTML()
+ *   2. Lo convertimos en Blob → URL temporal
+ *   3. Abrimos esa URL en una nueva pestaña (Chrome la trata como http-equivalente)
+ *   4. Una vez cargada, llamamos a window.print() con un script inline en el propio HTML
+ * ─────────────────────────────────────────────────────────────────────────*/
+function doPrint() {
+  if (S.anv.html && S.rev.html && S.anv.quad === S.rev.quad) return;
+
+  /* Insertamos el script de autoprint DENTRO del HTML del blob */
+  const htmlBase  = buildPrintHTML();
+  const autoPrint = `<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},400);});<\/script>`;
+  const fullHTML  = htmlBase.replace('</head>', autoPrint + '</head>');
+
+  const blob = new Blob([fullHTML], { type: 'text/html;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+
+  const newTab = window.open(url, '_blank');
+  if (!newTab) {
+    /* Popup bloqueado: descargamos el blob como .html y avisamos */
+    const a = document.createElement('a');
+    a.href     = url;
+    a.download = 'spd-imprimir.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    showToast('Popup bloqueado — se ha descargado "spd-imprimir.html". Ábrelo en Chrome y pulsa Ctrl+P.', 'warn');
+  } else {
+    setTimeout(() => URL.revokeObjectURL(url), 15000);
+  }
+}
+
+/* Pequeño toast de aviso */
+function showToast(msg, type) {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:${type==='warn'?'#92400e':'#1a2744'};color:#fff;padding:12px 20px;
+    border-radius:10px;font-size:13px;font-family:'Outfit',sans-serif;
+    box-shadow:0 4px 20px rgba(0,0,0,.3);z-index:9999;max-width:460px;text-align:center;line-height:1.4`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 7000);
+}
+</script>
+</body>
+</html>
